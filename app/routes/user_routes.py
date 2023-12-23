@@ -21,9 +21,9 @@ async def create_user(user: user_schema.UserCreate, db: Session = Depends(get_db
     :param db:
     :return:
     """
-    db_user = crud_user.get_user_by_email(db, email=user.email)
+    db_user = crud_user.get_user_by_username(db, username=user.username)
     if db_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
+        raise HTTPException(status_code=400, detail="User already registered")
     return crud_user.create_user(db=db, user=user)
 
 
@@ -77,24 +77,23 @@ async def delete_user(user_id: int, db: Session = Depends(get_db)):
     """
     return crud_user.delete_user(db=db, user_id=user_id)
 
-@router.post("/login")
-async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    """
-       OAuth2 compatible token login, get an access token for future requests.
-    """
 
+@router.post("/login")
+async def login(user: user_schema.UserLogin, db: Session = Depends(get_db)):
+    """
+    OAuth2 compatible token login, get an access token for future requests.
+    """
     # Authenticate the user
-    user = authentication.authenticate_user(db, form_data.username, form_data.password, form_data.email)
+    user = authentication.authenticate_user(db, user.username, user.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"}
+            headers={"WWW-Authenticate": "Bearer"},
         )
 
     # Create a new access token
     access_token = authentication.create_access_token(data={"sub": user.username})
     return {"access_token": access_token, "token_type": "bearer"}
-
 
 

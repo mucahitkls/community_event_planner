@@ -13,6 +13,10 @@ class UserCreate(UserBase):
     password: str
 
 
+class UserLogin(UserCreate):
+    pass
+
+
 class UserUpdate(UserBase):
     class Config:
         orm_mode = True
