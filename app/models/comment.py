@@ -1,4 +1,4 @@
-from app.services import Base
+from app.services import Base, engine
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
@@ -13,4 +13,5 @@ class Comment(Base):
 
     # Relationships
     author = relationship("User", back_populates="comments")
-    event = relationship("Event", back_populates="comments")
+    events = relationship("Event", back_populates="comments")
+

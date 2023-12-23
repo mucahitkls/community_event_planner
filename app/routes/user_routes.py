@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
-
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from app.schemas import user as user_schema
@@ -37,7 +36,7 @@ async def read_users(skip: int = 0, limit: int = 10, db: Session = Depends(get_d
     :param db:
     :return:
     """
-    users = crud_user.get_users()
+    users = crud_user.get_users(db, skip=skip, limit=limit)
     return users
 
 

@@ -13,7 +13,7 @@ def get_user_by_email(db: Session, email: str):
 
 def create_user(db: Session, user: UserCreate):
     hashed_password_ = pwd_context.hash(user.password)
-    db_user = User(email=user.email, hashed_password=hashed_password_)
+    db_user = User(username=user.username, email=user.email, hashed_password=hashed_password_)
     db.add(db_user)
     try:
         db.commit()

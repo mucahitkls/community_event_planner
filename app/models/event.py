@@ -1,7 +1,6 @@
-from app.services import Base
+from app.services import Base, engine
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
-
 
 class Event(Base):
     __tablename__ = 'events'
@@ -16,3 +15,4 @@ class Event(Base):
     # Relationships
     creator = relationship("User", back_populates="events")
     comments = relationship("Comment", back_populates="events")
+
