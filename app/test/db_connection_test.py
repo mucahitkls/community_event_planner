@@ -24,4 +24,7 @@ def test_db_connection():
             session.close()
 
 
-test_db_connection()
+if __name__ == "__main__":
+    logging.info("Starting database connection test...")
+    test_db_connection()
+    logging.info("Database connection test completed.")
