@@ -18,7 +18,7 @@ def test_db_connection():
     except SQLAlchemyError as e:
         logging.error(f"Database error occurred: {e}")
     except Exception as e:
-        logging.exception(f"An unexpected error occurred: {e}")
+        logging.exception(f"An unexpdected error occurred: {e}")
     finally:
         if 'session' in locals():
             session.close()
