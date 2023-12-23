@@ -11,7 +11,7 @@ def test_db_connection():
     # Only create tables if in a development environment
     Base.metadata.create_all(engine)  # Assuming dev environment
     try:
-        session = LocalSession()
+        session = SessionLocal()
         result = session.execute(text("Select version();"))
         for row in result:
             logging.info(f"Database connection success: {row[0]}")

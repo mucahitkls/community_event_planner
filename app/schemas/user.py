@@ -13,6 +13,11 @@ class UserCreate(UserBase):
     password: str
 
 
+class UserUpdate(UserBase):
+    class Config:
+        orm_mode = True
+
+
 class User(UserBase):
     id: int
     is_active: bool
