@@ -5,7 +5,7 @@ from typing import List, Optional
 
 # Shared properties
 class UserBase(BaseModel):
-    #   email: EmailStr
+    email: EmailStr
     username: str
 
 

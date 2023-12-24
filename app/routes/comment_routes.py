@@ -26,7 +26,7 @@ async def read_comments_for_event(event_id: int, db: Session = Depends(database.
     return crud_comment.get_comments_for_events(db=db, event_id=event_id)
 
 
-@router.delete("/{comment_id}", status_code=204)
+@router.delete("/{comment_id}")
 async def delete_comment(comment_id: int, db: Session = Depends(database.get_db), current_user: UserInDB = Depends(authentication.get_current_user)):
     success = crud_comment.delete_comment(db=db, comment_id=comment_id, user_id=current_user.id)
     if not success:

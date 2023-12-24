@@ -8,11 +8,11 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
     username = Column(String(100), unique=True, nullable=False)
-    #email = Column(String(100), unique=True, nullable=False)
+    email = Column(String(100), unique=True, nullable=False)
     hashed_password = Column(String(256), nullable=False)
 
     # Relationships
-    events = relationship("Event", back_populates="creator")  # One User can create many Events
-    comments = relationship("Comment", back_populates="author")  # One User can author many Comments
+    events = relationship("Event", back_populates="creator", cascade="all, delete-orphan")  # One User can create many Events
+    comments = relationship("Comment", back_populates="author", cascade="all, delete-orphan")  # One User can author many Comments
 
 #Base.metadata.create_all(engine)
