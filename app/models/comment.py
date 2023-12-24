@@ -12,7 +12,8 @@ class Comment(Base):
     event_id = Column(Integer, ForeignKey('events.id'))
 
     # Relationships
-    author = relationship("User", back_populates="comments")
-    events = relationship("Event", back_populates="comments")
+    author = relationship("User", back_populates="comments")  # Many Comments are authored by one User
+    event = relationship("Event", back_populates="comments")  # Many Comments belong to one Event
 
-Base.metadata.create_all(engine)
+
+#Base.metadata.create_all(engine)

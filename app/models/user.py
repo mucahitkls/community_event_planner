@@ -12,8 +12,7 @@ class User(Base):
     hashed_password = Column(String(256), nullable=False)
 
     # Relationships
-    events = relationship("Event", back_populates="creator")
-    comments = relationship("Comment", back_populates="author")
+    events = relationship("Event", back_populates="creator")  # One User can create many Events
+    comments = relationship("Comment", back_populates="author")  # One User can author many Comments
 
-
-Base.metadata.create_all(engine)
+#Base.metadata.create_all(engine)

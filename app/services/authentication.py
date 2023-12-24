@@ -65,22 +65,52 @@ def decode_token(token: str) -> Optional[dict]:
         return None
 
 
+# async def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)) -> UserInDB:
+#     credentials_exception = HTTPException(
+#         status_code=status.HTTP_401_UNAUTHORIZED,
+#         detail="Could not validate credentials",
+#         headers={"WWW-Authenticate": "Bearer"}
+#     )
+#     print("here")
+#     payload = decode_token(token)
+#     if payload is None:
+#         raise credentials_exception
+#     username: str = payload.get('sub')
+#     print(f"username")
+#
+#     if username is None:
+#         raise credentials_exception
+#     user = get_user_by_username(db=db, username=username)
+#     if user is None:
+#         raise credentials_exception
+#     return user
+
+
 async def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)) -> UserInDB:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"}
     )
-    print("here")
+
+    logger.info("Attempting to authenticate user")
     payload = decode_token(token)
+
     if payload is None:
+        logger.warning("Token payload could not be decoded")
         raise credentials_exception
+
     username: str = payload.get('sub')
-    print(f"username")
 
     if username is None:
+        logger.warning("Username not found in token payload")
         raise credentials_exception
+
     user = get_user_by_username(db=db, username=username)
+
     if user is None:
+        logger.warning(f"User with username {username} not found")
         raise credentials_exception
+
+    logger.info(f"User {username} successfully authenticated")
     return user

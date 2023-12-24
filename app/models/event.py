@@ -13,7 +13,9 @@ class Event(Base):
     creator_id = Column(Integer, ForeignKey('users.id'))
 
     # Relationships
-    creator = relationship("User", back_populates="events")
-    comments = relationship("Comment", back_populates="events")
+    creator = relationship("User", back_populates="events")  # Many Events are created by one User
+    comments = relationship("Comment", back_populates="event")  # One Event can have many Comments
 
-Base.metadata.create_all(engine)
+
+
+#Base.metadata.create_all(engine)

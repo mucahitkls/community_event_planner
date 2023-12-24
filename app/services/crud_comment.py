@@ -3,8 +3,8 @@ from app.schemas.comment import CommentCreate
 from app.models.comment import Comment
 
 
-def create_comment(db: Session, comment: CommentCreate, user_id: int, event_id: int):
-    db_comment = Comment(**comment.dict(), user_id=user_id, event_id=event_id)
+def create_comment(db: Session, comment: CommentCreate, user_id: int):
+    db_comment = Comment(**comment.dict(), user_id=user_id)
     db.add(db_comment)
     db.commit()
     db.refresh(db_comment)

@@ -16,8 +16,9 @@ router = APIRouter(
 
 
 @router.post("/", response_model=comment_schemas.Comment)
-async def create_comment_for_event(event_id: int, comment: comment_schemas.CommentCreate, db: Session = Depends(database.get_db), current_user: UserInDB = Depends(authentication.get_current_user)):
-    return crud_comment.create_comment(db=db, comment=comment, user_id=current_user.id, event_id=event_id)
+async def create_comment_for_event(comment: comment_schemas.CommentCreate, db: Session = Depends(database.get_db), current_user: UserInDB = Depends(authentication.get_current_user)):
+    print(comment)
+    return crud_comment.create_comment(db=db, comment=comment, user_id=current_user.id)
 
 
 @router.get("/event/{event_id}", response_model=List[comment_schemas.Comment])
