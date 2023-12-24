@@ -16,3 +16,4 @@ class Event(Base):
     creator = relationship("User", back_populates="events")
     comments = relationship("Comment", back_populates="events")
 
+Base.metadata.create_all(engine)

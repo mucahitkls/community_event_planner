@@ -13,6 +13,12 @@ from app.schemas.user import UserInDB
 from dotenv import load_dotenv
 import os
 
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
@@ -65,14 +71,16 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Depends(o
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"}
     )
-
+    print("here")
     payload = decode_token(token)
     if payload is None:
         raise credentials_exception
-    email: str = payload.get('sub')
-    if email is None:
+    username: str = payload.get('sub')
+    print(f"username")
+
+    if username is None:
         raise credentials_exception
-    user = get_user_by_email(db=db, email=email)
+    user = get_user_by_username(db=db, username=username)
     if user is None:
         raise credentials_exception
     return user

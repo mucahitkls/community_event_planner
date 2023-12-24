@@ -1,6 +1,4 @@
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import SQLAlchemyError
-from passlib.context import CryptContext
 from app.models.event import Event
 from app.schemas.event import EventCreate, EventUpdate
 

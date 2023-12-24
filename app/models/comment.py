@@ -15,3 +15,4 @@ class Comment(Base):
     author = relationship("User", back_populates="comments")
     events = relationship("Event", back_populates="comments")
 
+Base.metadata.create_all(engine)
