@@ -13,6 +13,13 @@ class UserCreate(UserBase):
     password: str
 
 
+class UserInDB(UserBase):
+    password: str
+
+    class Config:
+        orm_mode = True
+
+
 class UserLogin(UserCreate):
     pass
 

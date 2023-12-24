@@ -95,5 +95,3 @@ async def login(user: user_schema.UserLogin, db: Session = Depends(get_db)):
     # Create a new access token
     access_token = authentication.create_access_token(data={"sub": user.username})
     return {"access_token": access_token, "token_type": "bearer"}
-
-

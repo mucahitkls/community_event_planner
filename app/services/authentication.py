@@ -4,10 +4,11 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
-from fastapi import HTTPException, status
-
-from .crud_user import get_user_by_username
+from fastapi import HTTPException, status, Depends
+from app.services.database import get_db
+from .crud_user import get_user_by_email, get_user_by_username
 from app.models.user import User
+from app.schemas.user import UserInDB
 
 from dotenv import load_dotenv
 import os
@@ -21,8 +22,8 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-def verify_password(plain_password, hasshed_password):
-    return pwd_context.verify(plain_password, hasshed_password)
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password):
@@ -48,3 +49,30 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+
+def decode_token(token: str) -> Optional[dict]:
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except JWTError:
+        return None
+
+
+async def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)) -> UserInDB:
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"}
+    )
+
+    payload = decode_token(token)
+    if payload is None:
+        raise credentials_exception
+    email: str = payload.get('sub')
+    if email is None:
+        raise credentials_exception
+    user = get_user_by_email(db=db, email=email)
+    if user is None:
+        raise credentials_exception
+    return user
